@@ -1,95 +1,46 @@
 package controller;
 
-import java.io.BufferedWriter;
 import java.io.BufferedReader;
-import java.io.FileWriter;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class RedesController {
 
-	// Encontra o nome do SO
+	// identifica e retorna o nome do Sistema Operacional
+
 	private String Os() {
 
-		String nome = "";
+		return System.getProperty("os.name");
+
+	}
+
+	// verifica o Sistema Operacional e, de acordo com o S.O., faz a chamada de
+	// configuração de IP
+
+	public void Ip(String osName) {
 
 		try {
 
-			nome = System.getProperty("os.name");
+			Process process = null;
+
+			if (osName.toLowerCase().contains("win")) {
+
+				process = Runtime.getRuntime().exec("ipconfig");
+
+			} else if (osName.toLowerCase().contains("linux") || osName.toLowerCase().contains("mac")) {
+				process = Runtime.getRuntime().exec("ifconfig");
+			} else {
+				System.out.println("Sistema operacional não suportado.");
+				return;
+			}
+
+			// Lê a saída do comando
+
+			BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
 		} catch (Exception e) {
 
-			e.printStackTrace();
-
 		}
 
-		return nome;
 	}
 
-	// Manda o comando de rede dependendo do SO
-
-	public void Ip(String nome) throws IOException {
-
-		BufferedWriter writer = new BufferedWriter(new FileWriter("redesSo.txt"));
-		BufferedReader reader = new BufferedReader(new FileReader("redesSo.txt"));
-
-		Process processo;
-		String rede;
-
-		if (nome.contains("Win")) {
-
-			processo = Runtime.getRuntime().exec("ipconfig");
-			rede = processo.toString();
-
-			for (int i = 0; i == rede.length(); i++) {
-
-				writer.write(rede);
-				writer.newLine();
-
-			}
-
-			for (int i = 0; i == rede.length(); i++) {
-
-				if (reader.readLine().contains("ipv4")) {
-
-					System.out.println(reader.readLine());
-
-				}
-
-			}
-
-		} else if (nome.contains("nix") || nome.contains("nux") || nome.contains("mac")) {
-
-			processo = Runtime.getRuntime().exec("ipconfig");
-			rede = processo.toString();
-
-			for (int i = 0; i == rede.length(); i++) {
-
-				writer.write(rede);
-				writer.newLine();
-
-			}
-
-			for (int i = 0; i == rede.length(); i++) {
-
-				if (reader.readLine().contains("ipv4")) {
-
-					System.out.println(reader.readLine());
-
-				}
-
-			}
-		}
-	}
-
-	public void Ping(String nome) throws IOException {
-
-		Process processo;
-
-		if (nome.contains("Win")) {
-
-			processo = Runtime.getRuntime().exec("ping -n 10 8.8.8.8");
-
-		}
-	}
 }
