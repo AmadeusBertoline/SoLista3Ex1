@@ -15,7 +15,9 @@ public class RedesController {
 
 	// Retorna informações de ipv4
 
-	public void Ip(String osName) throws IOException {
+	public void Ip() throws IOException {
+
+		String osName = Os();
 
 		try {
 
@@ -105,7 +107,9 @@ public class RedesController {
 	// o S.O. e, faz a chamada
 	// de ping em IPv4 com 10 iterações
 
-	public void Ping(String osName) throws IOException {
+	public void Ping() throws IOException {
+
+		String osName = Os();
 
 		try {
 
